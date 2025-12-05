@@ -93,10 +93,37 @@ if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js')
             .then(registration => {
                 console.log('Service Worker registrado correctamente');
+                
+                // Verificar actualizaciones cada 10 segundos
+                setInterval(() => {
+                    registration.update();
+                }, 10000);
+                
+                // Detectar cuando hay una nueva versión
+                registration.addEventListener('updatefound', () => {
+                    const newWorker = registration.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'activated') {
+                            // Recargar la página para usar la nueva versión
+                            if (confirm('Hay una nueva versión disponible. ¿Desea actualizar?')) {
+                                window.location.reload();
+                            }
+                        }
+                    });
+                });
             })
             .catch(error => {
                 console.log('Error al registrar Service Worker:', error);
             });
+    });
+    
+    // Recargar cuando el Service Worker toma control
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!refreshing) {
+            refreshing = true;
+            window.location.reload();
+        }
     });
 }
 
