@@ -11,8 +11,10 @@ class Database {
             const request = indexedDB.open(this.dbName, this.version);
 
             request.onerror = () => reject(request.error);
-            request.onsuccess = () => {
+            request.onsuccess = async () => {
                 this.db = request.result;
+                // Inicializar configuración por defecto si no existe
+                await this.initDefaultConfig();
                 resolve(this.db);
             };
 
@@ -50,25 +52,36 @@ class Database {
                 if (!db.objectStoreNames.contains('config')) {
                     const configStore = db.createObjectStore('config', { keyPath: 'key' });
                     
-                    // Configuración inicial
-                    const defaultConfig = [
-                        { key: 'credentials', value: { username: 'Nestor', password: '1005' } },
-                        { key: 'tipoContribuyente', value: ['IVA', 'RC-IVA', 'IRACIS', 'IRE', 'INGRESOS BRUTOS'] },
-                        { key: 'tipoEntidad', value: ['PERSONAS FISICAS', 'PERSONAS JURIDICAS'] },
-                        { key: 'administracion', value: ['GRANDE', 'MEDIANA', 'PEQUEÑA'] },
-                        { key: 'facturacion', value: ['ELECTRONICA', 'MANUAL'] },
-                        { key: 'regimen', value: ['GENERAL', 'SIMPLIFICADO'] },
-                        { key: 'consolidacion', value: ['ANUAL', 'MENSUAL', 'TRIMESTRAL'] },
-                        { key: 'encargado', value: ['NESTOR', 'MARIA', 'JUAN', 'PEDRO'] }
-                    ];
-
-                    event.target.transaction.objectStore('config');
-                    defaultConfig.forEach(config => {
-                        configStore.add(config);
-                    });
+                    // No agregar datos aquí, se agregarán en initDefaultConfig
                 }
             };
         });
+    }
+
+    async initDefaultConfig() {
+        try {
+            // Verificar si ya existe la configuración
+            const credentials = await this.getConfig('credentials');
+            if (!credentials) {
+                // Agregar configuración inicial
+                const defaultConfig = [
+                    { key: 'credentials', value: { username: 'Nestor', password: '1005' } },
+                    { key: 'tipoContribuyente', value: ['IVA', 'RC-IVA', 'IRACIS', 'IRE', 'INGRESOS BRUTOS'] },
+                    { key: 'tipoEntidad', value: ['PERSONAS FISICAS', 'PERSONAS JURIDICAS'] },
+                    { key: 'administracion', value: ['GRANDE', 'MEDIANA', 'PEQUEÑA'] },
+                    { key: 'facturacion', value: ['ELECTRONICA', 'MANUAL'] },
+                    { key: 'regimen', value: ['GENERAL', 'SIMPLIFICADO'] },
+                    { key: 'consolidacion', value: ['ANUAL', 'MENSUAL', 'TRIMESTRAL'] },
+                    { key: 'encargado', value: ['NESTOR', 'MARIA', 'JUAN', 'PEDRO'] }
+                ];
+
+                for (const config of defaultConfig) {
+                    await this.setConfig(config.key, config.value);
+                }
+            }
+        } catch (error) {
+            console.error('Error al inicializar configuración:', error);
+        }
     }
 
     // Métodos CRUD genéricos
