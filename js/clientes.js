@@ -17,38 +17,56 @@ class ClientesManager {
     }
 
     async init() {
-        await this.loadOptions();
-        this.setupEventListeners();
-        await this.loadClients();
+        try {
+            await this.loadOptions();
+            this.setupEventListeners();
+            await this.loadClients();
+        } catch (error) {
+            console.error('Error al inicializar ClientesManager:', error);
+        }
     }
 
     async loadOptions() {
-        // Cargar opciones para los filtros y formularios
-        const tipoContribuyente = await db.getConfig('tipoContribuyente');
-        const tipoEntidad = await db.getConfig('tipoEntidad');
-        const administracion = await db.getConfig('administracion');
-        const facturacion = await db.getConfig('facturacion');
-        const regimen = await db.getConfig('regimen');
-        const consolidacion = await db.getConfig('consolidacion');
-        const encargado = await db.getConfig('encargado');
+        try {
+            // Cargar opciones para los filtros y formularios
+            const tipoContribuyente = await db.getConfig('tipoContribuyente') || [];
+            const tipoEntidad = await db.getConfig('tipoEntidad') || [];
+            const administracion = await db.getConfig('administracion') || [];
+            const facturacion = await db.getConfig('facturacion') || [];
+            const regimen = await db.getConfig('regimen') || [];
+            const consolidacion = await db.getConfig('consolidacion') || [];
+            const encargado = await db.getConfig('encargado') || [];
 
-        // Poblar filtros
-        this.populateSelect('filterTipoEntidad', tipoEntidad);
-        this.populateSelect('filterAdministracion', administracion);
-        this.populateSelect('filterFacturacion', facturacion);
-        this.populateSelect('filterConsolidacion', consolidacion);
-        this.populateSelect('filterEncargado', encargado);
+            // Poblar filtros
+            this.populateSelect('filterTipoEntidad', tipoEntidad);
+            this.populateSelect('filterAdministracion', administracion);
+            this.populateSelect('filterFacturacion', facturacion);
+            this.populateSelect('filterConsolidacion', consolidacion);
+            this.populateSelect('filterEncargado', encargado);
 
-        // Guardar opciones para uso posterior
-        this.options = {
-            tipoContribuyente,
-            tipoEntidad,
-            administracion,
-            facturacion,
-            regimen,
-            consolidacion,
-            encargado
-        };
+            // Guardar opciones para uso posterior
+            this.options = {
+                tipoContribuyente,
+                tipoEntidad,
+                administracion,
+                facturacion,
+                regimen,
+                consolidacion,
+                encargado
+            };
+        } catch (error) {
+            console.error('Error al cargar opciones:', error);
+            // Inicializar opciones vacías para evitar errores
+            this.options = {
+                tipoContribuyente: [],
+                tipoEntidad: [],
+                administracion: [],
+                facturacion: [],
+                regimen: [],
+                consolidacion: [],
+                encargado: []
+            };
+        }
     }
 
     populateSelect(selectId, options) {
@@ -234,6 +252,12 @@ class ClientesManager {
     showClientModal(client = null) {
         const isEdit = client !== null;
         const title = isEdit ? 'Editar Cliente' : 'Agregar Cliente';
+
+        // Asegurar que options existe
+        if (!this.options) {
+            showAlert('Error: Las opciones no están cargadas. Recarga la página.', 'error');
+            return;
+        }
 
         const content = `
             <form id="clientForm" class="client-form">

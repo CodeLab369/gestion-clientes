@@ -32,8 +32,10 @@ class App {
             await unirManager.init();
             comprimirManager.init();
             await ajustesManager.init();
+            console.log('Todos los managers inicializados correctamente');
         } catch (error) {
             console.error('Error al inicializar managers:', error);
+            showAlert('Error al inicializar la aplicación. Por favor recarga la página.', 'error');
         }
     }
 
