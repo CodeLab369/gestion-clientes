@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Clientes</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Pantalla de Login -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-container">
+            <h1>Gestión de Clientes</h1>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Usuario</label>
+                    <input type="text" id="username" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Aplicación Principal -->
+    <div id="mainApp" class="main-app" style="display: none;">
+        <!-- Header -->
+        <header class="app-header">
+            <h1>Gestión de Clientes</h1>
+            <button id="logoutBtn" class="btn btn-secondary">Cerrar Sesión</button>
+        </header>
+
+        <!-- Navegación -->
+        <nav class="app-nav">
+            <button class="nav-btn active" data-section="clientes">Clientes</button>
+            <button class="nav-btn" data-section="unir">Unir</button>
+            <button class="nav-btn" data-section="comprimir">Comprimir</button>
+            <button class="nav-btn" data-section="ajustes">Ajustes</button>
+        </nav>
+
+        <!-- Secciones -->
+        <main class="app-content">
+            <!-- Sección Clientes -->
+            <section id="clientesSection" class="section active">
+                <div class="section-header">
+                    <h2>Clientes</h2>
+                    <button id="addClientBtn" class="btn btn-primary">+ Agregar Cliente</button>
+                </div>
+
+                <!-- Buscador y Filtros -->
+                <div class="filters-container">
+                    <div class="search-box">
+                        <input type="text" id="searchClients" placeholder="Buscar clientes...">
+                    </div>
+                    
+                    <div class="filters-row">
+                        <div class="filter-group">
+                            <label>Último dígito NIT:</label>
+                            <select id="filterDigit">
+                                <option value="all">Todos</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Tipo de Entidad:</label>
+                            <select id="filterTipoEntidad">
+                                <option value="">Todos</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Administración:</label>
+                            <select id="filterAdministracion">
+                                <option value="">Todos</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Facturación:</label>
+                            <select id="filterFacturacion">
+                                <option value="">Todos</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Consolidación:</label>
+                            <select id="filterConsolidacion">
+                                <option value="">Todos</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Encargado:</label>
+                            <select id="filterEncargado">
+                                <option value="">Todos</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla de Clientes -->
+                <div class="table-container">
+                    <table id="clientsTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>NIT/CUR/CI</th>
+                                <th>Razón Social</th>
+                                <th>Marcas</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientsTableBody">
+                            <!-- Datos dinámicos -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Paginación -->
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        <label>Mostrar:
+                            <select id="clientsPerPage">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="50">50</option>
+                            </select>
+                            por página
+                        </label>
+                    </div>
+                    <div class="pagination-controls" id="clientsPagination">
+                        <!-- Botones de paginación dinámicos -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección Unir -->
+            <section id="unirSection" class="section">
+                <div class="section-header">
+                    <h2>Unir PDFs</h2>
+                </div>
+
+                <div class="unir-container">
+                    <div class="search-client-box">
+                        <label>Buscar Cliente:</label>
+                        <input type="text" id="searchClientUnir" placeholder="Buscar por NIT o Razón Social...">
+                        <div id="clientSuggestionsUnir" class="suggestions-list"></div>
+                    </div>
+
+                    <div id="selectedClientUnir" class="selected-client" style="display: none;">
+                        <h3>Cliente Seleccionado: <span id="clientNameUnir"></span></h3>
+                        
+                        <div id="pdfListUnir" class="pdf-selection-list">
+                            <!-- Lista de PDFs con checkboxes -->
+                        </div>
+
+                        <div class="merge-controls">
+                            <input type="text" id="mergedFileName" placeholder="Nombre del archivo combinado">
+                            <button id="mergePdfsBtn" class="btn btn-primary">Unir PDFs Seleccionados</button>
+                        </div>
+                    </div>
+
+                    <div id="mergedPdfsList" class="merged-pdfs-section">
+                        <h3>PDFs Unidos</h3>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre del Archivo</th>
+                                        <th>Fecha de Creación</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="mergedPdfsTableBody">
+                                    <!-- PDFs unidos dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="pagination-container">
+                            <div class="pagination-info">
+                                <label>Mostrar:
+                                    <select id="mergedPerPage">
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="50">50</option>
+                                    </select>
+                                    por página
+                                </label>
+                            </div>
+                            <div class="pagination-controls" id="mergedPagination"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección Comprimir -->
+            <section id="comprimirSection" class="section">
+                <div class="section-header">
+                    <h2>Comprimir PDFs</h2>
+                </div>
+
+                <div class="compress-container">
+                    <div class="compress-options">
+                        <div class="option-card">
+                            <h3>Un Cliente</h3>
+                            <p>Comprimir archivos de un cliente específico</p>
+                            <button class="btn btn-primary" id="compressOneBtn">Seleccionar</button>
+                        </div>
+
+                        <div class="option-card">
+                            <h3>Varios Clientes</h3>
+                            <p>Comprimir archivos de clientes seleccionados</p>
+                            <button class="btn btn-primary" id="compressMultipleBtn">Seleccionar</button>
+                        </div>
+
+                        <div class="option-card">
+                            <h3>Todos los Clientes</h3>
+                            <p>Comprimir archivos de todos los clientes</p>
+                            <button class="btn btn-primary" id="compressAllBtn">Seleccionar</button>
+                        </div>
+                    </div>
+
+                    <div id="compressFormContainer" class="compress-form" style="display: none;">
+                        <!-- Formulario dinámico según la opción -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección Ajustes -->
+            <section id="ajustesSection" class="section">
+                <div class="section-header">
+                    <h2>Ajustes</h2>
+                </div>
+
+                <div class="settings-container">
+                    <!-- Cambiar Credenciales -->
+                    <div class="settings-card">
+                        <h3>Cambiar Credenciales</h3>
+                        <form id="changeCredentialsForm">
+                            <div class="form-group">
+                                <label>Usuario Actual:</label>
+                                <input type="text" id="currentUsername" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Nuevo Usuario:</label>
+                                <input type="text" id="newUsername" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Nueva Contraseña:</label>
+                                <input type="password" id="newPassword" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Confirmar Contraseña:</label>
+                                <input type="password" id="confirmPassword" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Actualizar Credenciales</button>
+                        </form>
+                    </div>
+
+                    <!-- Gestionar Opciones -->
+                    <div class="settings-card">
+                        <h3>Gestionar Opciones</h3>
+                        <div class="options-manager">
+                            <select id="optionTypeSelect">
+                                <option value="">Seleccionar tipo de opción</option>
+                                <option value="tipoContribuyente">Tipo de Contribuyente</option>
+                                <option value="tipoEntidad">Tipo de Entidad</option>
+                                <option value="administracion">Administración</option>
+                                <option value="facturacion">Facturación</option>
+                                <option value="regimen">Régimen</option>
+                                <option value="consolidacion">Consolidación</option>
+                                <option value="encargado">Encargado</option>
+                            </select>
+
+                            <div id="optionsListContainer" class="options-list">
+                                <!-- Lista dinámica de opciones -->
+                            </div>
+
+                            <div class="options-controls">
+                                <input type="text" id="newOptionValue" placeholder="Nueva opción...">
+                                <button id="addOptionBtn" class="btn btn-secondary">Agregar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Backup y Restauración -->
+                    <div class="settings-card">
+                        <h3>Backup y Restauración</h3>
+                        <div class="backup-controls">
+                            <button id="createBackupBtn" class="btn btn-primary">Crear Backup</button>
+                            <div class="file-upload">
+                                <input type="file" id="restoreBackupInput" accept=".json" style="display: none;">
+                                <button id="restoreBackupBtn" class="btn btn-secondary">Restaurar Backup</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal Container -->
+    <div id="modalContainer"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="js/database.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/clientes.js"></script>
+    <script src="js/unir.js"></script>
+    <script src="js/comprimir.js"></script>
+    <script src="js/ajustes.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

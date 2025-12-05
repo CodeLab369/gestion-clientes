@@ -1,0 +1,270 @@
+/* Responsive Design */
+
+/* Tablets y pantallas medianas */
+@media (max-width: 1024px) {
+    .app-header,
+    .app-nav,
+    .app-content {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .filters-row {
+        grid-template-columns: 1fr;
+    }
+
+    .compress-options {
+        grid-template-columns: 1fr;
+    }
+
+    .client-form {
+        grid-template-columns: 1fr;
+    }
+
+    .view-client-modal .client-details {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Móviles */
+@media (max-width: 768px) {
+    .app-header {
+        padding: 15px 20px;
+    }
+
+    .app-header h1 {
+        font-size: 18px;
+    }
+
+    .section-header h2 {
+        font-size: 22px;
+    }
+
+    .app-nav {
+        padding: 0 10px;
+    }
+
+    .nav-btn {
+        padding: 12px 15px;
+        font-size: 14px;
+    }
+
+    .app-content {
+        padding: 20px 15px;
+    }
+
+    .data-table {
+        font-size: 12px;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 10px 8px;
+    }
+
+    .actions {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .action-btn {
+        width: 100%;
+        font-size: 12px;
+    }
+
+    .pagination-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .pagination-controls {
+        justify-content: center;
+    }
+
+    .page-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .digit-filters {
+        justify-content: center;
+    }
+
+    .filter-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    .modal {
+        max-width: 95%;
+        margin: 10px;
+    }
+
+    .modal-header {
+        padding: 15px 20px;
+    }
+
+    .modal-header h2 {
+        font-size: 20px;
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+
+    .modal-footer {
+        padding: 15px 20px;
+        flex-direction: column;
+    }
+
+    .modal-footer .btn {
+        width: 100%;
+    }
+
+    .months-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .years-tabs {
+        overflow-x: auto;
+    }
+
+    .merge-controls {
+        flex-direction: column;
+    }
+
+    .backup-controls {
+        flex-direction: column;
+    }
+
+    .backup-controls .btn {
+        width: 100%;
+    }
+
+    .login-container {
+        padding: 30px 20px;
+        margin: 20px;
+    }
+
+    .pdf-viewer-modal .modal {
+        max-width: 100%;
+        max-height: 100vh;
+        height: 100vh;
+        border-radius: 0;
+    }
+
+    .pdf-viewer-frame {
+        height: 100%;
+        min-height: 400px;
+    }
+
+    .pdf-viewer-controls {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+
+    .pdf-viewer-controls .btn {
+        width: 100%;
+    }
+}
+
+/* Móviles pequeños */
+@media (max-width: 480px) {
+    .app-header h1 {
+        font-size: 16px;
+    }
+
+    .section-header h2 {
+        font-size: 18px;
+    }
+
+    .nav-btn {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .btn {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+
+    .data-table {
+        font-size: 11px;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 8px 5px;
+    }
+
+    .months-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .digit-filters .filter-btn {
+        padding: 5px 10px;
+        font-size: 11px;
+    }
+
+    .modal-header h2 {
+        font-size: 18px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 10px;
+        font-size: 13px;
+    }
+}
+
+/* Scroll personalizado */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--light-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--text-light);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+/* Optimizaciones para impresión */
+@media print {
+    .app-header,
+    .app-nav,
+    .section-header button,
+    .filters-container,
+    .pagination-container,
+    .actions {
+        display: none !important;
+    }
+
+    .app-content {
+        padding: 0;
+    }
+
+    .table-container {
+        box-shadow: none;
+    }
+
+    body {
+        background: white;
+    }
+}

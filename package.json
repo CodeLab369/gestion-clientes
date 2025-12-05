@@ -1,0 +1,19 @@
+{
+  "name": "gestion-clientes",
+  "version": "1.0.0",
+  "description": "Aplicación web de gestión de clientes con almacenamiento local",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "serve": "python -m http.server 8000"
+  },
+  "keywords": [
+    "clientes",
+    "gestion",
+    "offline",
+    "indexeddb",
+    "pdf"
+  ],
+  "author": "Nestor",
+  "license": "MIT"
+}
